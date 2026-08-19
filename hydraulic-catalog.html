@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HydraDeals — Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#131B26;
+    --navy-2:#1C2733;
+    --steel:#5C6B80;
+    --steel-line: rgba(92,107,128,.28);
+    --paper:#E7EAEE;
+    --paper-2:#F4F5F7;
+    --white:#FBFBFC;
+    --orange:#F0530C;
+    --orange-dim: rgba(240,83,12,.14);
+    --yellow:#D6DE23;
+    --ink:#0D1117;
+    --ok:#2F8F5B;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.disp{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    margin:0;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  :focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001s !important; transition-duration:0.001s !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky; top:0; z-index:40;
+    background:var(--navy);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav-inner{
+    max-width:1280px; margin:0 auto; padding:16px 24px;
+    display:flex; align-items:center; gap:24px;
+    color:var(--white);
+  }
+  .brand{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+  .brand-mark{
+    width:30px;height:30px; border:2px solid var(--orange); border-radius:3px;
+    display:grid; place-items:center; position:relative;
+  }
+  .brand-mark::after{
+    content:""; width:10px;height:10px; background:var(--orange); border-radius:50%;
+  }
+  .brand-text{font-family:'Oswald',sans-serif; font-weight:700; font-size:19px; letter-spacing:.03em;}
+  .brand-sub{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--steel); letter-spacing:.12em; display:block; margin-top:1px;}
+  .search-wrap{flex:1; max-width:440px; position:relative;}
+  .search-wrap input{
+    width:100%; padding:10px 14px 10px 36px; border-radius:4px; border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.06); color:var(--white); font-size:14px; font-family:'Inter',sans-serif;
+  }
+  .search-wrap input::placeholder{color:var(--steel);}
+  .search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); width:15px;height:15px; stroke:var(--steel);}
+  .nav-right{display:flex; align-items:center; gap:18px; margin-left:auto;}
+  .nav-link{font-size:13px; letter-spacing:.05em; text-transform:uppercase; font-family:'Oswald',sans-serif; font-weight:500; color:var(--paper); opacity:.85; text-decoration:none;}
+  .cart-btn{
+    position:relative; display:flex; align-items:center; gap:8px;
+    background:var(--orange); color:var(--white); border:none; padding:9px 14px; border-radius:4px;
+    font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+  }
+  .cart-btn svg{width:16px;height:16px;}
+  .cart-count{
+    background:var(--navy); color:var(--yellow); font-family:'IBM Plex Mono',monospace; font-size:11px;
+    border-radius:10px; padding:1px 6px; min-width:16px; text-align:center;
+  }
+  .list-btn{
+    display:flex; align-items:center; gap:7px;
+    background:transparent; color:var(--white); border:1px solid rgba(255,255,255,.28); padding:9px 14px; border-radius:4px;
+    font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+  }
+  .list-btn:hover{border-color:var(--orange); color:var(--orange);}
+  .list-btn svg{width:13px;height:13px;}
+  .admin-btn{
+    display:flex; align-items:center; gap:7px;
+    background:transparent; color:var(--steel); border:1px solid transparent; padding:9px 10px; border-radius:4px;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.04em;
+  }
+  .admin-btn:hover{color:var(--paper);}
+  .admin-btn svg{width:14px;height:14px;}
+  .admin-btn.unlocked{color:var(--ok);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--navy);
+    background-image:
+      linear-gradient(var(--steel-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--steel-line) 1px, transparent 1px);
+    background-size:38px 38px;
+    background-position:center;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(ellipse 70% 60% at 20% 30%, rgba(19,27,38,0) 0%, var(--navy) 78%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    max-width:1280px; margin:0 auto; padding:76px 24px 64px;
+    display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center;
+    position:relative; z-index:1;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.16em; color:var(--orange);
+    display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--orange); display:inline-block;}
+  .hero h1{
+    color:var(--white); font-size:clamp(38px,5vw,60px); line-height:1.02; font-weight:700;
+  }
+  .hero h1 span{color:var(--orange);}
+  .hero p{
+    color:var(--paper); opacity:.72; font-size:16px; line-height:1.6; max-width:460px; margin:22px 0 30px;
+  }
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--orange); color:var(--white); border:none; padding:14px 26px; border-radius:4px;
+    font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+  }
+  .btn-ghost{
+    background:transparent; color:var(--white); border:1px solid rgba(255,255,255,.28); padding:14px 26px; border-radius:4px;
+    font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+  }
+  .hero-diagram{width:100%; height:auto;}
+  .flow-line{stroke-dasharray:6 7; animation:flow 1.6s linear infinite;}
+  @keyframes flow{ to{ stroke-dashoffset:-52; } }
+  .diagram-label{font-family:'IBM Plex Mono',monospace; font-size:10px; fill:var(--steel); letter-spacing:.05em;}
+
+  .statbar{
+    background:var(--navy-2); border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .statbar-inner{
+    max-width:1280px; margin:0 auto; padding:16px 24px;
+    display:flex; gap:0; flex-wrap:wrap; justify-content:space-between;
+  }
+  .stat{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--paper); display:flex; gap:8px; align-items:baseline;}
+  .stat b{color:var(--yellow); font-size:14px;}
+
+  /* ---------- CATALOG ---------- */
+  .catalog{max-width:1280px; margin:0 auto; padding:44px 24px 90px; display:grid; grid-template-columns:220px 1fr; gap:36px;}
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:22px; grid-column:1/-1;}
+  .section-head h2{font-size:24px; color:var(--ink);}
+  .result-count{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--steel);}
+
+  .filters{align-self:start; position:sticky; top:88px;}
+  .filter-block{margin-bottom:26px;}
+  .filter-title{
+    font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--steel); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid rgba(92,107,128,.3);
+  }
+  .cat-option{display:flex; align-items:center; gap:9px; margin-bottom:9px; font-size:13.5px; cursor:pointer;}
+  .cat-option input{accent-color:var(--orange); width:14px; height:14px;}
+  .cat-option span.count{margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel);}
+  .range-row{display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel); margin-bottom:6px;}
+  input[type="range"]{width:100%; accent-color:var(--orange);}
+  .clear-filters{
+    background:none; border:1px solid var(--steel); color:var(--steel); font-size:11.5px; padding:7px 12px; border-radius:3px;
+    font-family:'IBM Plex Mono',monospace; letter-spacing:.03em;
+  }
+
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+  select#sort{
+    background:var(--white); border:1px solid var(--steel-line); padding:8px 10px; border-radius:4px; font-size:13px; color:var(--ink);
+  }
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(252px,1fr)); gap:18px;}
+  .card{
+    background:var(--white); border:1px solid var(--steel-line); border-radius:6px; padding:18px;
+    display:flex; flex-direction:column; gap:12px; transition:box-shadow .15s, transform .15s;
+  }
+  .card:hover{box-shadow:0 8px 24px rgba(19,27,38,.10); transform:translateY(-2px);}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start;}
+  .cat-icon{
+    width:44px;height:44px; border-radius:5px; background:var(--paper-2); display:grid; place-items:center; flex-shrink:0;
+  }
+  .cat-icon svg{width:24px;height:24px; stroke:var(--navy); fill:none; stroke-width:1.6;}
+  .gauge{width:46px; height:46px; border-radius:50%; position:relative; display:grid; place-items:center;
+    background:conic-gradient(var(--orange) calc(var(--pct)*1%), var(--paper-2) 0);}
+  .gauge::after{content:""; position:absolute; width:32px;height:32px; border-radius:50%; background:var(--white);}
+  .gauge b{position:relative; z-index:1; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--navy); text-align:center; line-height:1.1;}
+  .card .kicker{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--orange); letter-spacing:.08em;}
+  .card h3{font-size:16.5px; font-weight:600; line-height:1.25; margin-top:2px;}
+  .part-no{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel);}
+  .spec-list{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--steel);
+    border-top:1px dashed var(--steel-line); border-bottom:1px dashed var(--steel-line);
+    padding:9px 0; display:flex; flex-direction:column; gap:5px;
+  }
+  .spec-list div{display:flex; justify-content:space-between;}
+  .spec-list span:last-child{color:var(--ink);}
+  .card-bottom{display:flex; align-items:center; justify-content:space-between; margin-top:auto;}
+  .price{font-family:'Oswald',sans-serif; font-size:19px; font-weight:600;}
+  .price sup{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:400; color:var(--steel);}
+  .add-btn{
+    background:var(--navy); color:var(--white); border:none; padding:9px 14px; border-radius:4px; font-size:12.5px;
+    font-family:'Oswald',sans-serif; letter-spacing:.04em; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:6px;
+  }
+  .add-btn:hover{background:var(--orange);}
+  .add-btn svg{width:13px;height:13px;}
+  .no-results{grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--steel);}
+  .no-results h3{color:var(--ink); margin-bottom:8px; font-size:18px;}
+  .card{position:relative;}
+  .own-tag{
+    position:absolute; top:12px; right:12px; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.06em;
+    color:var(--ok); background:rgba(47,143,91,.12); padding:2px 6px; border-radius:3px;
+  }
+  .card-admin-controls{position:absolute; top:11px; right:11px; display:none; gap:6px;}
+  .card:hover .card-admin-controls{display:flex;}
+  .card:hover .own-tag{display:none;}
+  .card-del, .card-edit{
+    width:22px; height:22px; border-radius:50%;
+    background:var(--paper-2); border:1px solid var(--steel-line); display:flex; align-items:center; justify-content:center;
+  }
+  .card-del svg, .card-edit svg{width:11px;height:11px; stroke:var(--steel);}
+  .card-del:hover{background:var(--orange); border-color:var(--orange);}
+  .card-del:hover svg{stroke:var(--white);}
+  .card-edit:hover{background:var(--navy); border-color:var(--navy);}
+  .card-edit:hover svg{stroke:var(--white);}
+
+  /* ---------- LIST PRODUCT MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(13,17,23,.55); z-index:59; opacity:0; pointer-events:none; transition:opacity .2s;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-overlay.open{opacity:1; pointer-events:auto;}
+  .modal{
+    background:var(--white); width:100%; max-width:520px; max-height:88vh; overflow-y:auto; border-radius:8px;
+    transform:translateY(14px) scale(.98); opacity:0; transition:all .2s;
+  }
+  .modal-overlay.open .modal{ transform:translateY(0) scale(1); opacity:1; }
+  .modal-head{
+    padding:20px 24px; border-bottom:1px solid var(--steel-line); display:flex; justify-content:space-between; align-items:flex-start;
+    position:sticky; top:0; background:var(--white);
+  }
+  .modal-head h3{font-size:19px;}
+  .modal-head p{margin:4px 0 0; font-size:12.5px; color:var(--steel);}
+  .modal-head button{background:none; border:none; padding:4px;}
+  .modal-head button svg{width:18px;height:18px; stroke:var(--ink);}
+  .modal-body{padding:20px 24px;}
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; color:var(--steel);
+    text-transform:uppercase; margin-bottom:6px;
+  }
+  .field input, .field select{
+    width:100%; padding:10px 12px; border:1px solid var(--steel-line); border-radius:4px; font-size:13.5px;
+    font-family:'Inter',sans-serif; color:var(--ink); background:var(--paper-2);
+  }
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .field-hint{font-size:11px; color:var(--steel); margin-top:5px;}
+  .spec-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;}
+  .spec-row input{padding:8px 10px; font-size:12.5px;}
+  .modal-foot{padding:16px 24px 22px; display:flex; gap:12px;}
+  .btn-cancel{
+    flex:1; background:var(--paper-2); border:1px solid var(--steel-line); color:var(--ink); padding:13px; border-radius:4px;
+    font-family:'Oswald',sans-serif; font-size:13.5px; letter-spacing:.04em; text-transform:uppercase; font-weight:600;
+  }
+  .btn-submit{
+    flex:2; background:var(--orange); border:none; color:var(--white); padding:13px; border-radius:4px;
+    font-family:'Oswald',sans-serif; font-size:13.5px; letter-spacing:.04em; text-transform:uppercase; font-weight:600;
+  }
+  .req-err{color:var(--orange); font-size:11.5px; margin-top:4px; display:none;}
+
+  /* ---------- CART DRAWER ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(13,17,23,.5); z-index:49; opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .overlay.open{opacity:1; pointer-events:auto;}
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:380px; max-width:92vw; background:var(--white); z-index:50;
+    transform:translateX(100%); transition:transform .25s ease; display:flex; flex-direction:column;
+    box-shadow:-8px 0 30px rgba(0,0,0,.2);
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{padding:20px 22px; border-bottom:1px solid var(--steel-line); display:flex; justify-content:space-between; align-items:center;}
+  .drawer-head h3{font-size:17px;}
+  .drawer-head button{background:none; border:none; padding:4px;}
+  .drawer-head button svg{width:18px;height:18px; stroke:var(--ink);}
+  .drawer-body{flex:1; overflow-y:auto; padding:14px 22px;}
+  .drawer-empty{text-align:center; color:var(--steel); padding:60px 10px; font-size:13.5px;}
+  .drawer-item{display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--steel-line);}
+  .drawer-item .cat-icon{width:40px;height:40px;}
+  .drawer-item .di-info{flex:1;}
+  .drawer-item h4{font-size:13.5px; font-weight:600; margin:0 0 3px;}
+  .drawer-item .part-no{font-size:10.5px;}
+  .qty-row{display:flex; align-items:center; gap:10px; margin-top:8px;}
+  .qty-row button{
+    width:22px;height:22px; border-radius:3px; border:1px solid var(--steel-line); background:var(--paper-2);
+    display:grid; place-items:center; font-size:14px; line-height:1;
+  }
+  .qty-row .qty-val{font-family:'IBM Plex Mono',monospace; font-size:12.5px; min-width:16px; text-align:center;}
+  .qty-row .rm{margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--orange); background:none; border:none; text-decoration:underline;}
+  .di-price{font-family:'IBM Plex Mono',monospace; font-size:13px; white-space:nowrap;}
+  .drawer-foot{padding:18px 22px; border-top:1px solid var(--steel-line);}
+  .subtotal-row{display:flex; justify-content:space-between; font-size:14px; margin-bottom:14px;}
+  .subtotal-row b{font-family:'Oswald',sans-serif; font-size:19px;}
+  .quote-btn{
+    width:100%; background:var(--orange); color:var(--white); border:none; padding:14px; border-radius:4px;
+    font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+  }
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); z-index:60;
+    background:var(--navy); color:var(--white); padding:13px 22px; border-radius:5px; font-size:13.5px;
+    display:flex; align-items:center; gap:10px; opacity:0; pointer-events:none; transition:all .25s;
+    border-left:3px solid var(--ok);
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  footer{background:var(--navy); color:var(--paper); margin-top:0;}
+  .foot-inner{max-width:1280px; margin:0 auto; padding:44px 24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px;}
+  .foot-inner .brand-text{color:var(--white);}
+  .foot-cols{display:flex; gap:56px; flex-wrap:wrap;}
+  .foot-col h4{font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--steel); margin-bottom:12px;}
+  .foot-col a{display:block; font-size:13px; opacity:.8; text-decoration:none; margin-bottom:9px;}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.08); padding:18px 24px; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--steel);}
+
+  @media (max-width:860px){
+    .hero-inner{grid-template-columns:1fr; padding-top:52px;}
+    .hero-diagram{max-width:340px;}
+    .search-wrap{display:none;}
+    .catalog{grid-template-columns:1fr;}
+    .filters{position:static; display:flex; flex-wrap:wrap; gap:24px; padding-bottom:20px; border-bottom:1px solid var(--steel-line); margin-bottom:22px;}
+    .filter-block{margin-bottom:0; min-width:150px;}
+    .statbar-inner{gap:16px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ICON SYMBOLS -->
+<svg style="display:none">
+  <symbol id="ic-cylinder" viewBox="0 0 24 24"><rect x="2" y="8" width="13" height="8" rx="1"/><line x1="15" y1="10" x2="15" y2="14"/><line x1="17" y1="11" x2="22" y2="11"/><line x1="17" y1="13" x2="20" y2="13"/></symbol>
+  <symbol id="ic-pump" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.4"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="1" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="23" y2="12"/></symbol>
+  <symbol id="ic-valve" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="6" rx="1"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></symbol>
+  <symbol id="ic-hose" viewBox="0 0 24 24"><path d="M2 12c2-4 4 4 6 0s4 4 6 0 4 4 6 0"/><circle cx="2" cy="12" r="1.4"/><circle cx="20" cy="12" r="1.4"/></symbol>
+  <symbol id="ic-seal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.4"/></symbol>
+  <symbol id="ic-motor" viewBox="0 0 24 24"><rect x="4" y="6" width="12" height="12" rx="1.5"/><line x1="16" y1="10" x2="21" y2="10"/><line x1="16" y1="14" x2="21" y2="14"/><line x1="7" y1="6" x2="7" y2="3"/><line x1="13" y1="6" x2="13" y2="3"/></symbol>
+</svg>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <span class="brand-text">HYDRADEALS</span>
+        <span class="brand-sub">HYDRAULIC SUPPLY CO.</span>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Search part name or number…" aria-label="Search products">
+    </div>
+    <div class="nav-right">
+      <a class="nav-link" href="#catalog">Catalog</a>
+      <button class="admin-btn" id="adminBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span id="adminBtnLabel">Admin</span>
+      </button>
+      <button class="list-btn" id="listOpenBtn" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        List a Product
+      </button>
+      <button class="cart-btn" id="cartOpenBtn" aria-label="Open quote cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Quote <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="configBanner" style="display:none; background:#3a2200; color:#F5C97A; font-family:'IBM Plex Mono',monospace; font-size:12.5px; padding:10px 24px; text-align:center;">
+  ⚠ Supabase isn't configured yet — edit SUPABASE_URL and SUPABASE_ANON_KEY near the top of the &lt;script&gt; tag.
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">RATED · TESTED · IN STOCK</div>
+      <h1>Built for<br><span>10,000 PSI.</span><br>Not for downtime.</h1>
+      <p>Cylinders, pumps, valves and fittings engineered to spec and shipped from stock. Every part on this page is cross-referenced to its pressure rating — no guesswork on the shop floor.</p>
+      <div class="hero-ctas">
+        <a href="#catalog" class="btn-primary">Browse Catalog</a>
+        <a href="#" onclick="return false;" class="btn-ghost">Request Spec Sheet</a>
+      </div>
+    </div>
+    <svg class="hero-diagram" viewBox="0 0 420 300" fill="none">
+      <!-- reservoir -->
+      <rect x="20" y="200" width="70" height="60" rx="3" stroke="#5C6B80" stroke-width="1.5"/>
+      <text x="26" y="272" class="diagram-label">RESERVOIR</text>
+      <!-- pump -->
+      <circle cx="150" cy="230" r="24" stroke="#F0530C" stroke-width="1.8"/>
+      <circle cx="150" cy="230" r="7" stroke="#F0530C" stroke-width="1.8"/>
+      <text x="126" y="272" class="diagram-label">PUMP</text>
+      <!-- valve -->
+      <rect x="220" y="212" width="48" height="30" rx="2" stroke="#5C6B80" stroke-width="1.5"/>
+      <text x="222" y="272" class="diagram-label">VALVE</text>
+      <!-- cylinder -->
+      <rect x="310" y="60" width="80" height="34" rx="2" stroke="#D6DE23" stroke-width="1.8"/>
+      <line x1="390" y1="77" x2="410" y2="77" stroke="#D6DE23" stroke-width="1.8"/>
+      <text x="312" y="52" class="diagram-label">CYLINDER — 3000 PSI</text>
+      <!-- lines -->
+      <path d="M90 230 H126" stroke="#5C6B80" stroke-width="1.5"/>
+      <path class="flow-line" d="M174 220 H220" stroke="#F0530C" stroke-width="2"/>
+      <path class="flow-line" d="M244 212 V95 Q244 77 262 77 H310" stroke="#F0530C" stroke-width="2"/>
+      <path d="M244 242 V262 Q244 280 226 280 H90" stroke="#5C6B80" stroke-width="1.5" stroke-dasharray="3 4"/>
+      <circle cx="244" cy="212" r="2.5" fill="#F0530C"/>
+      <circle cx="244" cy="242" r="2.5" fill="#5C6B80"/>
+    </svg>
+  </div>
+</header>
+
+<div class="statbar">
+  <div class="statbar-inner">
+    <div class="stat"><b>500+</b> SKUs IN STOCK</div>
+    <div class="stat"><b>10,000</b> PSI MAX RATING</div>
+    <div class="stat"><b>24 HR</b> DISPATCH ON STOCK ITEMS</div>
+    <div class="stat"><b>ISO 9001</b> CERTIFIED SUPPLY</div>
+  </div>
+</div>
+
+<main class="catalog" id="catalog">
+  <div class="section-head">
+    <h2>Product Catalog</h2>
+    <span class="result-count" id="resultCount">10 items</span>
+  </div>
+
+  <aside class="filters">
+    <div class="filter-block">
+      <div class="filter-title">Category</div>
+      <div id="categoryList"></div>
+    </div>
+    <div class="filter-block">
+      <div class="filter-title">Max Pressure (PSI)</div>
+      <div class="range-row"><span>0</span><span id="pressureVal">6000+</span></div>
+      <input type="range" id="pressureRange" min="0" max="6000" step="250" value="0">
+    </div>
+    <button class="clear-filters" id="clearFilters">RESET FILTERS</button>
+  </aside>
+
+  <section style="grid-column:2/3; min-width:0;">
+    <div class="toolbar">
+      <span class="mono" style="font-size:11.5px; color:var(--steel);">Showing all in-stock parts</span>
+      <select id="sort" aria-label="Sort products">
+        <option value="featured">Sort: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="psi-desc">Pressure: High to Low</option>
+      </select>
+    </div>
+    <div class="grid" id="productGrid"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="brand" style="margin-bottom:14px;">
+        <div class="brand-mark"></div>
+        <span class="brand-text">HYDRADEALS</span>
+      </div>
+      <p style="opacity:.6; font-size:12.5px; max-width:260px; line-height:1.6;">Hydraulic components for fabrication, fleet maintenance and industrial OEM lines.</p>
+    </div>
+    <div class="foot-cols">
+      <div class="foot-col">
+        <h4>Catalog</h4>
+        <a href="#" onclick="return false;">Cylinders</a>
+        <a href="#" onclick="return false;">Pumps &amp; Motors</a>
+        <a href="#" onclick="return false;">Valves</a>
+      </div>
+      <div class="foot-col">
+        <h4>Support</h4>
+        <a href="#" onclick="return false;">Spec Sheets</a>
+        <a href="#" onclick="return false;">Returns</a>
+        <a href="#" onclick="return false;">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">DEMO CATALOG — SAMPLE DATA · HYDRADEALS HYDRAULIC SUPPLY CO.</div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Quote cart">
+  <div class="drawer-head">
+    <h3>Your Quote (<span id="drawerCount">0</span>)</h3>
+    <button id="drawerClose" aria-label="Close cart"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot">
+    <div class="subtotal-row"><span>Subtotal</span><b id="subtotalVal">$0.00</b></div>
+    <button class="quote-btn" id="requestQuoteBtn">Request Quote</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="loginOverlay">
+  <div class="modal" role="dialog" aria-label="Admin login" style="max-width:360px;">
+    <div class="modal-head">
+      <div>
+        <h3 id="loginTitle">Admin Login</h3>
+        <p>Sign in to create, edit, or remove listings.</p>
+      </div>
+      <button id="loginClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" type="email" placeholder="you@example.com" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="f-password">Password</label>
+        <input id="f-password" type="password" placeholder="Enter admin password" autocomplete="current-password">
+      </div>
+      <div class="req-err" id="loginErr">Incorrect email or password.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" id="loginCancel">Cancel</button>
+      <button class="btn-submit" id="loginSubmit">Log In</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-label="List a product">
+    <div class="modal-head">
+      <div>
+        <h3 id="modalTitle">List a Product</h3>
+        <p id="modalSubtitle">Add a part to your live catalog — it'll appear in the grid immediately.</p>
+      </div>
+      <button id="modalClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="f-name">Product Name *</label>
+        <input id="f-name" type="text" placeholder="e.g. HC-600 Welded Cylinder">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="f-cat">Category *</label>
+          <select id="f-cat">
+            <option value="__new__">+ Add new category…</option>
+          </select>
+          <input id="f-cat-new" type="text" placeholder="New category name" style="margin-top:8px; display:none;">
+        </div>
+        <div class="field">
+          <label for="f-icon">Icon</label>
+          <select id="f-icon">
+            <option value="ic-cylinder">Cylinder</option>
+            <option value="ic-pump">Pump</option>
+            <option value="ic-valve">Valve</option>
+            <option value="ic-hose">Hose / Fitting</option>
+            <option value="ic-seal">Seal</option>
+            <option value="ic-motor">Motor</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="f-part">Part Number</label>
+          <input id="f-part" type="text" placeholder="Auto-generated if blank">
+        </div>
+        <div class="field">
+          <label for="f-psi">Max Pressure (PSI) *</label>
+          <input id="f-psi" type="number" min="0" step="50" placeholder="e.g. 3000">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-price">Price (USD) *</label>
+        <input id="f-price" type="number" min="0" step="0.01" placeholder="e.g. 249.00">
+      </div>
+      <div class="field">
+        <label>Specs (optional — shown on the product card)</label>
+        <div class="spec-row"><input id="f-spec1k" placeholder="Label, e.g. Bore"><input id="f-spec1v" placeholder="Value, e.g. 3 in"></div>
+        <div class="spec-row"><input id="f-spec2k" placeholder="Label, e.g. Stroke"><input id="f-spec2v" placeholder="Value, e.g. 18 in"></div>
+        <div class="spec-row"><input id="f-spec3k" placeholder="Label"><input id="f-spec3v" placeholder="Value"></div>
+      </div>
+      <div class="req-err" id="formErr">Please fill in the required fields marked *.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-submit" id="modalSubmit">Add to Catalog</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* =========================================================
+   SUPABASE CONFIG — replace these two values with your own
+   (Supabase dashboard → Settings → API)
+   ========================================================= */
+const SUPABASE_URL = "https://puhkootecsfdxxqxofcp.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_VfZhqalgbL9Nm-XRajw1vA_3esvwKxC";
+
+const isConfigured = !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
+if(!isConfigured) document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('configBanner').style.display = 'block';
+});
+let sb = null;
+if(isConfigured){
+  try{
+    if(!window.supabase) throw new Error("Supabase library didn't load (check your internet connection or ad-blocker)");
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }catch(e){
+    console.error("Supabase init failed:", e);
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const banner = document.getElementById('configBanner');
+      banner.style.display = 'block';
+      banner.textContent = '⚠ Couldn\'t connect to Supabase: ' + e.message;
+    });
+  }
+}
+
+let PRODUCTS = [];
+let CATEGORIES = [];
+let activeCats = new Set();
+let minPressure = 0;
+let sortMode = "featured";
+let searchTerm = "";
+let cart = {}; // id -> qty
+let adminUnlocked = false;
+let editingId = null;
+let currentSession = null;
+
+/* ---- Data layer: all reads/writes go through Supabase ---- */
+async function fetchProducts(){
+  if(!sb){ PRODUCTS = []; CATEGORIES = []; return; }
+  const { data, error } = await sb.from('products').select('*').order('id', {ascending:true});
+  if(error){ showToast("Couldn't load products — check Supabase config"); console.error(error); return; }
+  PRODUCTS = (data || []).map(p => ({
+    id:p.id, name:p.name, part:p.part, cat:p.category, icon:p.icon,
+    psi:p.psi, price:Number(p.price), specs:p.specs || {}
+  }));
+  CATEGORIES = [...new Set(PRODUCTS.map(p=>p.cat))];
+}
+
+async function insertProduct(product){
+  const { error } = await sb.from('products').insert({
+    name:product.name, part:product.part, category:product.cat, icon:product.icon,
+    psi:product.psi, price:product.price, specs:product.specs
+  });
+  return error;
+}
+async function updateProductRow(id, product){
+  const { error } = await sb.from('products').update({
+    name:product.name, part:product.part, category:product.cat, icon:product.icon,
+    psi:product.psi, price:product.price, specs:product.specs
+  }).eq('id', id);
+  return error;
+}
+async function deleteProductRow(id){
+  const { error } = await sb.from('products').delete().eq('id', id);
+  return error;
+}
+
+const fmt = n => n.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+
+function renderCategoryFilters(){
+  const wrap = document.getElementById('categoryList');
+  wrap.innerHTML = CATEGORIES.map(c=>{
+    const count = PRODUCTS.filter(p=>p.cat===c).length;
+    return `<label class="cat-option">
+      <input type="checkbox" value="${c}" onchange="toggleCat('${c}')" ${activeCats.has(c)?'checked':''}>
+      ${c} <span class="count">${count}</span>
+    </label>`;
+  }).join('');
+}
+
+function toggleCat(c){
+  if(activeCats.has(c)) activeCats.delete(c); else activeCats.add(c);
+  renderGrid();
+}
+
+document.getElementById('pressureRange').addEventListener('input', e=>{
+  minPressure = Number(e.target.value);
+  document.getElementById('pressureVal').textContent = minPressure >= 6000 ? "6000+" : minPressure;
+  renderGrid();
+});
+
+document.getElementById('sort').addEventListener('change', e=>{
+  sortMode = e.target.value;
+  renderGrid();
+});
+
+document.getElementById('searchInput').addEventListener('input', e=>{
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderGrid();
+});
+
+document.getElementById('clearFilters').addEventListener('click', ()=>{
+  activeCats.clear();
+  minPressure = 0;
+  document.getElementById('pressureRange').value = 0;
+  document.getElementById('pressureVal').textContent = "6000+";
+  document.querySelectorAll('.cat-option input').forEach(i=>i.checked=false);
+  renderGrid();
+});
+
+function getFiltered(){
+  let list = PRODUCTS.filter(p=>{
+    if(activeCats.size && !activeCats.has(p.cat)) return false;
+    if(p.psi < minPressure) return false;
+    if(searchTerm && !(p.name.toLowerCase().includes(searchTerm) || p.part.toLowerCase().includes(searchTerm))) return false;
+    return true;
+  });
+  if(sortMode==="price-asc") list.sort((a,b)=>a.price-b.price);
+  else if(sortMode==="price-desc") list.sort((a,b)=>b.price-a.price);
+  else if(sortMode==="psi-desc") list.sort((a,b)=>b.psi-a.psi);
+  return list;
+}
+
+function renderGrid(){
+  const list = getFiltered();
+  document.getElementById('resultCount').textContent = `${list.length} item${list.length!==1?'s':''}`;
+  const grid = document.getElementById('productGrid');
+  if(!isConfigured){
+    grid.innerHTML = `<div class="no-results"><h3>Not connected yet</h3>Add your Supabase URL and anon key in the code to load the catalog.</div>`;
+    return;
+  }
+  if(!list.length){
+    grid.innerHTML = `<div class="no-results"><h3>No parts match those filters</h3>Try widening the pressure range or clearing a category.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p=>{
+    const pct = Math.min(100, Math.round(p.psi/6000*100));
+    const specsHtml = Object.entries(p.specs).map(([k,v])=>`<div><span>${k}</span><span>${v}</span></div>`).join('');
+    return `
+    <div class="card">
+      ${adminUnlocked ? `<div class="card-admin-controls">
+        <button class="card-edit" onclick="editProduct(${p.id})" aria-label="Edit listing"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+        <button class="card-del" onclick="deleteProduct(${p.id})" aria-label="Remove listing"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>` : ''}
+      <div class="card-top">
+        <div class="cat-icon"><svg><use href="#${p.icon}"/></svg></div>
+        <div class="gauge" style="--pct:${pct}"><b>${p.psi}<br>PSI</b></div>
+      </div>
+      <div>
+        <div class="kicker">${p.cat.toUpperCase()}</div>
+        <h3>${p.name}</h3>
+        <div class="part-no">PART ${p.part}</div>
+      </div>
+      <div class="spec-list">${specsHtml}</div>
+      <div class="card-bottom">
+        <div class="price"><sup>$</sup>${fmt(p.price)}</div>
+        <button class="add-btn" onclick="addToCart(${p.id})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addToCart(id){
+  cart[id] = (cart[id]||0) + 1;
+  renderCart();
+  showToast("Added to quote — " + PRODUCTS.find(p=>p.id===id).name);
+}
+function changeQty(id, delta){
+  cart[id] = (cart[id]||0) + delta;
+  if(cart[id]<=0) delete cart[id];
+  renderCart();
+}
+function removeItem(id){
+  delete cart[id];
+  renderCart();
+}
+
+function renderCart(){
+  const ids = Object.keys(cart);
+  const totalCount = ids.reduce((s,id)=>s+cart[id],0);
+  document.getElementById('cartCount').textContent = totalCount;
+  document.getElementById('drawerCount').textContent = totalCount;
+  const body = document.getElementById('drawerBody');
+  if(!ids.length){
+    body.innerHTML = `<div class="drawer-empty">Your quote list is empty.<br>Add parts from the catalog to get started.</div>`;
+    document.getElementById('subtotalVal').textContent = "$0.00";
+    return;
+  }
+  let subtotal = 0;
+  body.innerHTML = ids.map(id=>{
+    const p = PRODUCTS.find(x=>x.id==id);
+    if(!p) return '';
+    const qty = cart[id];
+    subtotal += p.price*qty;
+    return `
+    <div class="drawer-item">
+      <div class="cat-icon"><svg><use href="#${p.icon}"/></svg></div>
+      <div class="di-info">
+        <h4>${p.name}</h4>
+        <div class="part-no">${p.part}</div>
+        <div class="qty-row">
+          <button onclick="changeQty(${id},-1)" aria-label="Decrease quantity">−</button>
+          <span class="qty-val">${qty}</span>
+          <button onclick="changeQty(${id},1)" aria-label="Increase quantity">+</button>
+          <button class="rm" onclick="removeItem(${id})">Remove</button>
+        </div>
+      </div>
+      <div class="di-price">$${fmt(p.price*qty)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('subtotalVal').textContent = "$"+fmt(subtotal);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
+function openDrawer(){ overlay.classList.add('open'); drawer.classList.add('open'); }
+function closeDrawer(){ overlay.classList.remove('open'); drawer.classList.remove('open'); }
+document.getElementById('cartOpenBtn').addEventListener('click', openDrawer);
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+document.getElementById('requestQuoteBtn').addEventListener('click', ()=>{
+  if(!Object.keys(cart).length){ showToast("Add parts to your quote first"); return; }
+  showToast("Quote request sent — our team will follow up shortly");
+  cart = {};
+  renderCart();
+  closeDrawer();
+});
+
+async function deleteProduct(id){
+  if(!adminUnlocked) return;
+  const error = await deleteProductRow(id);
+  if(error){ showToast("Couldn't delete — " + error.message); return; }
+  delete cart[id];
+  await fetchProducts();
+  renderCategoryFilters();
+  renderGrid();
+  renderCart();
+  showToast("Listing removed");
+}
+
+/* ---- Admin login (real Supabase Auth) ---- */
+const loginOverlay = document.getElementById('loginOverlay');
+const adminBtn = document.getElementById('adminBtn');
+const adminBtnLabel = document.getElementById('adminBtnLabel');
+const listOpenBtn = document.getElementById('listOpenBtn');
+
+function updateAdminUI(){
+  listOpenBtn.style.display = adminUnlocked ? 'flex' : 'none';
+  adminBtnLabel.textContent = adminUnlocked ? 'Admin (log out)' : 'Admin';
+  adminBtn.classList.toggle('unlocked', adminUnlocked);
+  renderGrid();
+}
+
+adminBtn.addEventListener('click', async ()=>{
+  if(!isConfigured){ showToast("Connect Supabase first — see the banner above"); return; }
+  if(adminUnlocked){
+    await sb.auth.signOut();
+    adminUnlocked = false;
+    currentSession = null;
+    updateAdminUI();
+    showToast("Logged out of admin");
+    return;
+  }
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-password').value = '';
+  document.getElementById('loginErr').style.display = 'none';
+  loginOverlay.classList.add('open');
+  setTimeout(()=>document.getElementById('f-email').focus(), 50);
+});
+document.getElementById('loginClose').addEventListener('click', ()=>loginOverlay.classList.remove('open'));
+document.getElementById('loginCancel').addEventListener('click', ()=>loginOverlay.classList.remove('open'));
+loginOverlay.addEventListener('click', e=>{ if(e.target===loginOverlay) loginOverlay.classList.remove('open'); });
+
+async function attemptLogin(){
+  const email = document.getElementById('f-email').value.trim();
+  const password = document.getElementById('f-password').value;
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if(error || !data.session){
+    document.getElementById('loginErr').textContent = error ? error.message : "Incorrect email or password.";
+    document.getElementById('loginErr').style.display = 'block';
+    return;
+  }
+  currentSession = data.session;
+  adminUnlocked = true;
+  loginOverlay.classList.remove('open');
+  updateAdminUI();
+  showToast("Logged in — you can now list and edit products");
+}
+document.getElementById('loginSubmit').addEventListener('click', attemptLogin);
+document.getElementById('f-password').addEventListener('keydown', e=>{ if(e.key==='Enter') attemptLogin(); });
+
+/* ---- List / Edit Product modal ---- */
+const modalOverlay = document.getElementById('modalOverlay');
+const fCat = document.getElementById('f-cat');
+const fCatNew = document.getElementById('f-cat-new');
+
+function populateCatSelect(){
+  const current = fCat.value;
+  fCat.innerHTML = CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('') + `<option value="__new__">+ Add new category…</option>`;
+  if(CATEGORIES.includes(current)) fCat.value = current;
+}
+fCat.addEventListener('change', ()=>{
+  fCatNew.style.display = fCat.value === "__new__" ? "block" : "none";
+});
+
+function openModal(){
+  if(!adminUnlocked){ adminBtn.click(); return; }
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'List a Product';
+  document.getElementById('modalSubtitle').textContent = "Add a part to your live catalog — it'll appear in the grid immediately.";
+  document.getElementById('modalSubmit').textContent = 'Add to Catalog';
+  clearForm();
+  populateCatSelect();
+  document.getElementById('formErr').style.display = 'none';
+  modalOverlay.classList.add('open');
+}
+function closeModal(){
+  modalOverlay.classList.remove('open');
+}
+function editProduct(id){
+  if(!adminUnlocked) return;
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Edit Listing';
+  document.getElementById('modalSubtitle').textContent = 'Update this product — changes apply immediately.';
+  document.getElementById('modalSubmit').textContent = 'Save Changes';
+  populateCatSelect();
+  document.getElementById('formErr').style.display = 'none';
+  document.getElementById('f-name').value = p.name;
+  document.getElementById('f-part').value = p.part;
+  document.getElementById('f-psi').value = p.psi;
+  document.getElementById('f-price').value = p.price;
+  document.getElementById('f-icon').value = p.icon;
+  fCat.value = CATEGORIES.includes(p.cat) ? p.cat : '__new__';
+  fCatNew.style.display = fCat.value === '__new__' ? 'block' : 'none';
+  fCatNew.value = fCat.value === '__new__' ? p.cat : '';
+  const specKeys = Object.entries(p.specs || {});
+  ['f-spec1k','f-spec1v','f-spec2k','f-spec2v','f-spec3k','f-spec3v'].forEach(id=>document.getElementById(id).value='');
+  specKeys.slice(0,3).forEach(([k,v],i)=>{
+    document.getElementById(`f-spec${i+1}k`).value = k;
+    document.getElementById(`f-spec${i+1}v`).value = v;
+  });
+  modalOverlay.classList.add('open');
+}
+document.getElementById('listOpenBtn').addEventListener('click', openModal);
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalCancel').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e=>{ if(e.target===modalOverlay) closeModal(); });
+
+function clearForm(){
+  ['f-name','f-part','f-psi','f-price','f-spec1k','f-spec1v','f-spec2k','f-spec2v','f-spec3k','f-spec3v','f-cat-new']
+    .forEach(id=>document.getElementById(id).value = '');
+  fCatNew.style.display = 'none';
+  document.getElementById('f-icon').value = 'ic-cylinder';
+}
+
+document.getElementById('modalSubmit').addEventListener('click', async ()=>{
+  if(!adminUnlocked) return;
+  const name = document.getElementById('f-name').value.trim();
+  const psi = Number(document.getElementById('f-psi').value);
+  const price = Number(document.getElementById('f-price').value);
+  let cat = fCat.value === "__new__" ? fCatNew.value.trim() : fCat.value;
+  const icon = document.getElementById('f-icon').value;
+  let part = document.getElementById('f-part').value.trim();
+
+  if(!name || !cat || !psi || psi<=0 || isNaN(price) || price<0){
+    document.getElementById('formErr').style.display = 'block';
+    return;
+  }
+  document.getElementById('formErr').style.display = 'none';
+
+  if(!part){
+    const prefix = cat.replace(/[^A-Za-z]/g,'').slice(0,3).toUpperCase() || "GEN";
+    part = `HD-${prefix}-${Math.floor(1000+Math.random()*9000)}`;
+  }
+
+  const specs = {};
+  [['f-spec1k','f-spec1v'],['f-spec2k','f-spec2v'],['f-spec3k','f-spec3v']].forEach(([k,v])=>{
+    const kv = document.getElementById(k).value.trim();
+    const vv = document.getElementById(v).value.trim();
+    if(kv && vv) specs[kv] = vv;
+  });
+
+  const wasEdit = editingId !== null;
+  let error;
+  if(wasEdit){
+    error = await updateProductRow(editingId, {name, part, cat, icon, psi, price, specs});
+  }else{
+    error = await insertProduct({name, part, cat, icon, psi, price, specs});
+  }
+
+  if(error){
+    document.getElementById('formErr').textContent = "Couldn't save — " + error.message;
+    document.getElementById('formErr').style.display = 'block';
+    return;
+  }
+
+  await fetchProducts();
+  renderCategoryFilters();
+  renderGrid();
+  editingId = null;
+  clearForm();
+  closeModal();
+  showToast(wasEdit ? "Changes saved." : "Listed! Now live in your catalog.");
+});
+
+(async function init(){
+  if(!sb){ renderGrid(); renderCart(); return; }
+  const { data: { session } } = await sb.auth.getSession();
+  if(session){ currentSession = session; adminUnlocked = true; }
+  await fetchProducts();
+  renderCategoryFilters();
+  renderGrid();
+  renderCart();
+  updateAdminUI();
+})();
+</script>
+</body>
+</html>
